@@ -29,17 +29,17 @@ const ChatBoard = ({ messages, sessionId }: ChatBoardProps) => {
   }, [messages])
 
   const handleSendMessage = async (content: string) => {
+    setError(null)
+    addNewMessage({ sessionId, content, role: Role.USER })
+
+    let responseText = ""
+    const assistantMessageId = addNewMessage({
+      sessionId,
+      content: responseText,
+      role: Role.ASSISTANT,
+    })
+
     try {
-      setError(null)
-      addNewMessage({ sessionId, content, role: Role.USER })
-
-      let responseText = ""
-      const assistantMessageId = addNewMessage({
-        sessionId,
-        content: responseText,
-        role: Role.ASSISTANT,
-      })
-
       await getLLMStreamResponse(content, (text) => {
         responseText += text
         updateMessage({
@@ -56,7 +56,14 @@ const ChatBoard = ({ messages, sessionId }: ChatBoardProps) => {
         content: responseText,
         messageId: assistantMessageId,
       })
+      
     } catch (err) {
+      updateMessage({
+        sessionId,
+        finalUpdate: true,
+        content: "Not able to get response from LLM",
+        messageId: assistantMessageId,
+      })
       setError("Failed to get response. Please try again.")
       console.error("LLM Response Error:", err)
     }
