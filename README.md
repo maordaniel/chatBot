@@ -12,7 +12,7 @@ yarn install
 3. Create a `.env` file in the root of the project and add the following:
 
 ```bash
-VITE_API_KEY=your_api_key
+VITE_LLM_API_KEY=your_api_key
 ```
 
 4. Start the development server
