@@ -1,50 +1,56 @@
-# React + TypeScript + Vite
+# Chat bot
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Getting Started
 
-Currently, two official plugins are available:
+1. Clone the repository
+2. Install dependencies using yarn
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```bash
+yarn install
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+3. Create a `.env` file in the root of the project and add the following:
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```bash
+VITE_API_KEY=your_api_key
 ```
+
+4. Start the development server
+
+```bash
+yarn dev
+```
+
+## Technical Choices
+
+### Core Technologies
+
+- **React + TypeScript**: Chosen for type safety, better developer experience, and robust ecosystem
+- **Material UI**: Chosen for its robust design system and ease of use
+- **Vite**: Selected as build tool for its superior development experience and fast HMR
+- **Zustand**: Chosen for its state management capabilities and ease of use
+- **React Router**: Chosen for its routing capabilities and ease of use
+- **ESLint**: Ensures code quality and consistency across the codebase
+- **Prettier**: Ensures code formatting consistency across the codebase
+
+### Key Libraries
+
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc): Faster compilation compared to Babel
+- [Other key libraries and justifications...]
+
+### Features
+
+- Chatbot
+- Chat history
+- Add a new chat
+- Switch between chats
+- Delete a chat
+
+## Performance Improvement Ideas
+
+### Frontend Optimizations
+
+- Implement code splitting
+- Minimize unnecessary re-renders
+- Use React.memo for functional components
+- use zustand to store chat history in the local storage
