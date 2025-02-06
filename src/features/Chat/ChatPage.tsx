@@ -49,7 +49,9 @@ const ChatPage = () => {
           <Box
             sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}
           >
-            <Typography variant="h6">No chat session found</Typography>
+            <Typography variant="h6">
+              {sessionId ? "No chat session found" : "Start a new chat"}
+            </Typography>
           </Box>
         )}
       </Box>
