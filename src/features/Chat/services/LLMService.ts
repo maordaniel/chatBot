@@ -1,27 +1,25 @@
+import { processChunk } from "@features/Chat/utils"
+
 const API_KEY = import.meta.env.VITE_LLM_API_KEY
 
-interface LLMResponse {
-  candidates?: Array<{
-    content?: {
-      parts?: Array<{
-        text?: string
-      }>
-    }
-  }>
-}
+const LLM_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:streamGenerateContent?key=${API_KEY}`
 
 export const getLLMStreamResponse = async (prompt: string, onChunk: (text: string) => void) => {
   try {
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:streamGenerateContent?key=${API_KEY}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
-      },
-    )
+    const response = await fetch(LLM_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+      }),
+    })
 
-    if (!response.body) throw new Error("No response body")
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+    if (!response.body) {
+      throw new Error("No response body")
+    }
 
     const reader = response.body.getReader()
     const decoder = new TextDecoder("utf-8")
@@ -31,21 +29,10 @@ export const getLLMStreamResponse = async (prompt: string, onChunk: (text: strin
       if (done) break
 
       const chunk = decoder.decode(value, { stream: true })
-
-      const jsonChunk = chunk
-        .replace(/^,\s*/, "")
-        .replace(/^\[\s*/, "")
-        .replace(/\s*\]$/, "")
-        .trim()
-
-      if (jsonChunk && jsonChunk.startsWith("{") && jsonChunk.endsWith("}")) {
-        const parsedChunk: LLMResponse = JSON.parse(jsonChunk)
-        const text = parsedChunk.candidates?.[0]?.content?.parts?.[0]?.text || "No response"
-        onChunk(text)
-      }
+      processChunk(chunk, onChunk)
     }
   } catch (error) {
-    console.error("Error:", error)
+    console.error("Error in getLLMStreamResponse:", error)
     throw error
   }
 }

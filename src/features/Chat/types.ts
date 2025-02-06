@@ -17,3 +17,13 @@ export interface ChatSession {
   createdAt: Date
   updatedAt: Date
 }
+
+export interface LLMResponse {
+  candidates?: Array<{
+    content?: {
+      parts?: Array<{
+        text?: string
+      }>
+    }
+  }>
+}
