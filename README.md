@@ -21,6 +21,11 @@ VITE_API_KEY=your_api_key
 yarn dev
 ```
 
+## Requirements
+
+- node version 22.13.1
+- api key for llm
+
 ## Technical Choices
 
 ### Core Technologies
