@@ -43,6 +43,31 @@ yarn dev
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc): Faster compilation compared to Babel
 - [Other key libraries and justifications...]
 
+## Folder Structure
+
+- bulletproof-react folder structure
+
+```bash
+src
+|
++-- app # application layer containing:
+| | # this folder might differ based on the meta framework used
+| +-- routes # application routes / can also be pages
+| +-- app.tsx # main application component
+  | +-- router.tsx # application router configuration
+  +-- components # shared components used across the entire application
+  |
+  +-- features # feature based modules
+  |
+  +-- hooks # shared hooks used across the entire application
+  |
+  +-- stores # global state stores
+  |
+  +-- types # shared types used across the application
+  |
+  +-- utils # shared utility functions
+```
+
 ### Features
 
 - Chatbot
@@ -59,3 +84,4 @@ yarn dev
 - Minimize unnecessary re-renders
 - Use React.memo for functional components
 - use zustand to store chat history in the local storage
+```
