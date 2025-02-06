@@ -1,15 +1,15 @@
 import React, { useEffect } from "react"
 import { Box, Typography } from "@mui/material"
-import { useChat } from "@features/Chat/hooks/useChat"
-import { useParams, useNavigate } from "react-router-dom"
-import ChatBoard from "@features/Chat/components/ChatBoard"
 import SideBar, { DRAWER_WIDTH } from "@/components/SideBar"
 import { useChatStore } from "@features/Chat/stores/chatStore"
+import { useChatActions } from "@features/Chat/hooks/useChatActions"
+import { useParams, useNavigate } from "react-router-dom"
+import ChatBoard from "@features/Chat/components/ChatBoard"
 
 const ChatPage = () => {
   const navigate = useNavigate()
   const { sessionId } = useParams<{ sessionId: string }>()
-  const { addNewSession } = useChat()
+  const { addNewSession } = useChatActions()
   const { sessions, currentSessionId, setCurrentSession } = useChatStore()
 
   useEffect(() => {

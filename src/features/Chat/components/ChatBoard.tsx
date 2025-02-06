@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from "react"
 import { Box, Paper } from "@mui/material"
 import { Message, Role } from "@features/Chat/types"
-import { useChat } from "@features/Chat/hooks/useChat"
 import { useChatStore } from "@features/Chat/stores/chatStore"
 import { ChatInput } from "@features/Chat/components/ChatInput"
 import { ChatMessage } from "@features/Chat/components/ChatMessage"
+import { useChatActions } from "@features/Chat/hooks/useChatActions"
 import { getLLMStreamResponse } from "@features/Chat/services/LLMService"
 
 interface ChatBoardProps {
@@ -13,8 +13,8 @@ interface ChatBoardProps {
 }
 
 const ChatBoard = ({ messages, sessionId }: ChatBoardProps) => {
-  const { addNewMessage, updateMessage } = useChat()
   const { loadingMessage } = useChatStore()
+  const { addNewMessage, updateMessage } = useChatActions()
   const [error, setError] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 

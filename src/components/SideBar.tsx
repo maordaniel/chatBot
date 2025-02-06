@@ -1,9 +1,9 @@
 import React, { memo, useMemo, useState, useCallback } from "react"
 import { useNavigate } from "react-router-dom"
 import { Add as AddIcon } from "@mui/icons-material"
-import { useChat } from "@features/Chat/hooks/useChat"
 import { useChatStore } from "@features/Chat/stores/chatStore"
 import { Box, List, Drawer, Button, Divider } from "@mui/material"
+import { useChatActions } from "@features/Chat/hooks/useChatActions"
 import SessionItem from "./SessionItem"
 import DeleteActionDialog from "./ DeleteActionDialog"
 
@@ -11,8 +11,9 @@ export const DRAWER_WIDTH = 280
 
 const SideBar = () => {
   const navigate = useNavigate()
-  const { addNewSession } = useChat()
+  const { addNewSession } = useChatActions()
   const { sessions, currentSessionId, deleteSession } = useChatStore()
+  
   const [mobileOpen, setMobileOpen] = useState(false)
   const [sessionToDelete, setSessionToDelete] = useState<string | null>(null)
 

@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid"
 import { Role } from "@features/Chat/types"
 import { useChatStore } from "@features/Chat/stores/chatStore"
 
-export const useChat = () => {
+export const useChatActions = () => {
   const {
     addSession,
     addMessage,
