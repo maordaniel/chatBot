@@ -10,7 +10,7 @@ interface PaletteModeBtnProps {
 
 const PaletteModeBtn = ({ isDarkTheme, changeThemeMode }: PaletteModeBtnProps) => (
   <IconButton onClick={changeThemeMode}>
-    {isDarkTheme ? <LightModeIcon /> : <DarkModeIcon />}
+    {isDarkTheme ? <DarkModeIcon /> : <LightModeIcon />}
   </IconButton>
 )
 
