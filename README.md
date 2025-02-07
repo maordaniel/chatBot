@@ -38,14 +38,10 @@ yarn dev
 - **ESLint**: Ensures code quality and consistency across the codebase
 - **Prettier**: Ensures code formatting consistency across the codebase
 
-### Key Libraries
-
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc): Faster compilation compared to Babel
-- [Other key libraries and justifications...]
 
 ## Folder Structure
 
-- bulletproof-react folder structure
+-  [bulletproof-react folder structure](https://github.com/alan2207/bulletproof-react/blob/master/docs/project-structure.md)
 
 ```bash
 src
@@ -76,7 +72,6 @@ src
 - Switch between chats
 - Delete a chat
 
-## Performance Improvement Ideas
 
 ### Frontend Optimizations
 
@@ -84,4 +79,9 @@ src
 - Minimize unnecessary re-renders
 - Use React.memo for functional components
 - use zustand to store chat history in the local storage
-```
+
+### Next Steps for the project
+
+- Add tests
+- Add react-localization
+- Add storybook
