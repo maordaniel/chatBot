@@ -1,4 +1,5 @@
 import React, { memo, useMemo, useState, useCallback } from "react"
+import { CHAT_ROUTE } from "@/app/Router"
 import { useNavigate } from "react-router-dom"
 import { Add as AddIcon } from "@mui/icons-material"
 import { useChatStore } from "@features/Chat/stores/chatStore"
@@ -13,7 +14,7 @@ const SideBar = () => {
   const navigate = useNavigate()
   const { addNewSession } = useChatActions()
   const { sessions, currentSessionId, deleteSession } = useChatStore()
-  
+
   const [mobileOpen, setMobileOpen] = useState(false)
   const [sessionToDelete, setSessionToDelete] = useState<string | null>(null)
 
@@ -26,7 +27,7 @@ const SideBar = () => {
   }, [sessions])
 
   const handleNewChat = useCallback(
-    () => navigate(`/chat/${addNewSession()}`),
+    () => navigate(`/${CHAT_ROUTE}/${addNewSession()}`),
     [navigate, addNewSession],
   )
 
@@ -68,13 +69,13 @@ const SideBar = () => {
           </Box>
           <Divider />
           <List sx={{ flexGrow: 1, overflow: "auto" }}>
-            {sortedSessions.map((session) => (
+            {sortedSessions.map(({ id, title, createdAt }) => (
               <SessionItem
-                key={session.id}
-                id={session.id}
-                title={session.title}
-                createdAt={session.createdAt}
-                isSelected={session.id === currentSessionId}
+                key={id}
+                id={id}
+                title={title}
+                createdAt={createdAt}
+                isSelected={id === currentSessionId}
                 onSelect={handleSelectChat}
                 onDelete={handleDeleteClick}
               />

@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-route
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 
-const CHAT_ROUTE = "chat"
+export const CHAT_ROUTE = "chat"
 
 const Router = () => {
   const NotFound = () => {

@@ -1,9 +1,11 @@
 import React, { useEffect } from "react"
-import { Box, Typography } from "@mui/material"
+import { CHAT_ROUTE } from "@/app/Router"
+import { useParams, useNavigate } from "react-router-dom"
 import SideBar, { DRAWER_WIDTH } from "@/components/SideBar"
 import { useChatStore } from "@features/Chat/stores/chatStore"
+import { Box, IconButton, Stack, Typography } from "@mui/material"
 import { useChatActions } from "@features/Chat/hooks/useChatActions"
-import { useParams, useNavigate } from "react-router-dom"
+import CreateIcon from "@mui/icons-material/Create"
 import ChatBoard from "@features/Chat/components/ChatBoard"
 
 const ChatPage = () => {
@@ -19,13 +21,15 @@ const ChatPage = () => {
         return
       }
 
-      if (Object.keys(sessions).length) navigate(`/chat/${Object.keys(sessions)[0]}`)
+      if (Object.keys(sessions).length) navigate(`/${CHAT_ROUTE}/${Object.keys(sessions)[0]}`)
     }
 
     initializeSession()
   }, [addNewSession, currentSessionId, navigate, sessionId, sessions, setCurrentSession])
 
   const currentSession = sessions[currentSessionId]
+
+  const handleNewChat = () => navigate(`/${CHAT_ROUTE}/${addNewSession()}`)
 
   return (
     <Box sx={{ display: "flex", height: "93vh" }}>
@@ -46,13 +50,17 @@ const ChatPage = () => {
             messages={Object.values(currentSession.messages)}
           />
         ) : (
-          <Box
+          <Stack
             sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}
           >
-            <Typography variant="h6">
-              {sessionId ? "No chat session found" : "Start a new chat"}
+            <Typography variant="h6">{sessionId && "No chat session found"}</Typography>
+            <Typography variant="h6" sx={{ display: "flex", alignItems: "center" }}>
+              Start a new chat
+              <IconButton onClick={handleNewChat}>
+                <CreateIcon />
+              </IconButton>
             </Typography>
-          </Box>
+          </Stack>
         )}
       </Box>
     </Box>
