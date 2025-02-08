@@ -9,7 +9,7 @@ interface ChatMessageProps {
   isLlmResLoading: boolean
 }
 
-export const ChatMessage = memo(
+const ChatMessage = memo(
   ({ isLlmResLoading, message: { role, timestamp, content } }: ChatMessageProps) => {
     const isAssistant = role === Role.ASSISTANT
 
@@ -60,3 +60,5 @@ export const ChatMessage = memo(
     )
   },
 )
+
+export default ChatMessage

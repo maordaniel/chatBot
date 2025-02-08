@@ -1,5 +1,6 @@
-import { useState, KeyboardEvent } from "react"
+import React from "react"
 import { Send } from "@mui/icons-material"
+import { useState, KeyboardEvent } from "react"
 import { TextField, IconButton, Box } from "@mui/material"
 
 interface ChatInputProps {
@@ -7,7 +8,7 @@ interface ChatInputProps {
   onSendMessage: (prompt: string) => void
 }
 
-export const ChatInput = ({ onSendMessage, disabled }: ChatInputProps) => {
+const ChatInput = ({ onSendMessage, disabled }: ChatInputProps) => {
   const [message, setMessage] = useState("")
 
   const handleSend = () => {
@@ -50,3 +51,5 @@ export const ChatInput = ({ onSendMessage, disabled }: ChatInputProps) => {
     </Box>
   )
 }
+
+export default React.memo(ChatInput)

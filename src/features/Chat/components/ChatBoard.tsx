@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import { Box, Paper } from "@mui/material"
 import { Message, Role } from "@features/Chat/types"
 import { useChatStore } from "@features/Chat/stores/chatStore"
-import { ChatInput } from "@features/Chat/components/ChatInput"
-import { ChatMessage } from "@features/Chat/components/ChatMessage"
 import { useChatActions } from "@features/Chat/hooks/useChatActions"
 import { getLLMStreamResponse } from "@features/Chat/services/LLMService"
+import ChatInput from "@features/Chat/components/ChatInput"
+import  ChatMessage  from "@features/Chat/components/ChatMessage"
 
 interface ChatBoardProps {
   messages: Message[]
@@ -28,46 +28,48 @@ const ChatBoard = ({ messages, sessionId }: ChatBoardProps) => {
     scrollToBottom()
   }, [messages])
 
-  const handleSendMessage = async (prompt: string) => {
-    setError(null)
-    addNewMessage({ sessionId, content: prompt, role: Role.USER })
+  const handleSendMessage = useCallback(
+    async (prompt: string) => {
+      setError(null)
+      addNewMessage({ sessionId, content: prompt, role: Role.USER })
 
-    let responseText = ""
-    const assistantMessageId = addNewMessage({
-      sessionId,
-      content: responseText,
-      role: Role.ASSISTANT,
-    })
+      let responseText = ""
+      const assistantMessageId = addNewMessage({
+        sessionId,
+        content: responseText,
+        role: Role.ASSISTANT,
+      })
 
-    try {
-      await getLLMStreamResponse(prompt, (text) => {
-        responseText += text
+      try {
+        await getLLMStreamResponse(prompt, (text) => {
+          responseText += text
+          updateMessage({
+            sessionId,
+            finalUpdate: false,
+            content: responseText,
+            messageId: assistantMessageId,
+          })
+        })
+
         updateMessage({
           sessionId,
-          finalUpdate: false,
+          finalUpdate: true,
           content: responseText,
           messageId: assistantMessageId,
         })
-      })
-
-      updateMessage({
-        sessionId,
-        finalUpdate: true,
-        content: responseText,
-        messageId: assistantMessageId,
-      })
-      
-    } catch (err) {
-      updateMessage({
-        sessionId,
-        finalUpdate: true,
-        content: "Not able to get response from LLM",
-        messageId: assistantMessageId,
-      })
-      setError("Failed to get response. Please try again.")
-      console.error("LLM Response Error:", err)
-    }
-  }
+      } catch (err) {
+        updateMessage({
+          sessionId,
+          finalUpdate: true,
+          content: "Not able to get response from LLM",
+          messageId: assistantMessageId,
+        })
+        setError("Failed to get response. Please try again.")
+        console.error("LLM Response Error:", err)
+      }
+    },
+    [addNewMessage, sessionId, updateMessage],
+  )
 
   return (
     <Paper elevation={3} sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
