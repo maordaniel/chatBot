@@ -37,7 +37,7 @@ yarn dev
 - **React Router**: Chosen for its routing capabilities and ease of use
 - **ESLint**: Ensures code quality and consistency across the codebase
 - **Prettier**: Ensures code formatting consistency across the codebase
-
+- **Path alias**: Chosen for its ease of use and ability to create a path alias for the project
 
 ## Folder Structure
 
