@@ -28,9 +28,9 @@ const ChatBoard = ({ messages, sessionId }: ChatBoardProps) => {
     scrollToBottom()
   }, [messages])
 
-  const handleSendMessage = async (content: string) => {
+  const handleSendMessage = async (prompt: string) => {
     setError(null)
-    addNewMessage({ sessionId, content, role: Role.USER })
+    addNewMessage({ sessionId, content: prompt, role: Role.USER })
 
     let responseText = ""
     const assistantMessageId = addNewMessage({
@@ -40,7 +40,7 @@ const ChatBoard = ({ messages, sessionId }: ChatBoardProps) => {
     })
 
     try {
-      await getLLMStreamResponse(content, (text) => {
+      await getLLMStreamResponse(prompt, (text) => {
         responseText += text
         updateMessage({
           sessionId,

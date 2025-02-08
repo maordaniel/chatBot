@@ -4,7 +4,7 @@ import { TextField, IconButton, Box } from "@mui/material"
 
 interface ChatInputProps {
   disabled?: boolean
-  onSendMessage: (content: string) => void
+  onSendMessage: (prompt: string) => void
 }
 
 export const ChatInput = ({ onSendMessage, disabled }: ChatInputProps) => {
