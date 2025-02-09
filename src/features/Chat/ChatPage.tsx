@@ -21,7 +21,8 @@ const ChatPage = () => {
         return
       }
 
-      if (Object.keys(sessions).length) navigate(`/${CHAT_ROUTE}/${Object.keys(sessions)[0]}`)
+      const firstSessionId = Object.keys(sessions)[0]
+      if (!!firstSessionId) navigate(`/${CHAT_ROUTE}/${firstSessionId}`)
     }
 
     initializeSession()
@@ -32,7 +33,12 @@ const ChatPage = () => {
   const handleNewChat = () => navigate(`/${CHAT_ROUTE}/${addNewSession()}`)
 
   return (
-    <Box sx={{ display: "flex", height: "93vh" }}>
+    <Box
+      sx={{
+        display: "flex",
+        height: "calc(100vh - 4rem)",
+      }}
+    >
       <SideBar />
       <Box
         component="main"
@@ -41,10 +47,9 @@ const ChatPage = () => {
           flexGrow: 1,
           ml: { sm: `${DRAWER_WIDTH}px` },
           width: { sm: `calc(100% - ${DRAWER_WIDTH}px)` },
-          overflow: "hidden",
         }}
       >
-        {currentSession ? (
+        {!!currentSession ? (
           <ChatBoard
             sessionId={currentSession.id}
             messages={Object.values(currentSession.messages)}
