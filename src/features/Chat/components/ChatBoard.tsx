@@ -5,7 +5,7 @@ import { useChatStore } from "@features/Chat/stores/chatStore"
 import { useChatActions } from "@features/Chat/hooks/useChatActions"
 import { getLLMStreamResponse } from "@features/Chat/services/LLMService"
 import ChatInput from "@features/Chat/components/ChatInput"
-import  ChatMessage  from "@features/Chat/components/ChatMessage"
+import ChatMessage from "@features/Chat/components/ChatMessage"
 
 interface ChatBoardProps {
   messages: Message[]
@@ -20,9 +20,7 @@ const ChatBoard = ({ messages, sessionId }: ChatBoardProps) => {
 
   const isLlmResLoading = loadingMessage[sessionId]
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }
+  const scrollToBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
 
   useEffect(() => {
     scrollToBottom()
