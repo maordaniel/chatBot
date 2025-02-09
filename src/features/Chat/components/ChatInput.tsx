@@ -43,6 +43,7 @@ const ChatInput = ({ onSendMessage, disabled }: ChatInputProps) => {
         disabled={disabled}
         onKeyPress={handleKeyPress}
         placeholder="Type a message..."
+        inputRef={(input) => input?.focus()}
         onChange={(e) => setMessage(e.target.value)}
       />
       <IconButton color="primary" onClick={handleSend} disabled={disabled || !message.trim()}>
