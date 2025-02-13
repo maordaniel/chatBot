@@ -2,7 +2,7 @@
 
 ## Live Demo
 
-[Live Demo](https://chatbotapp-a2354.web.app/)
+[Live Demo](https://chatbotapp-a2354.firebaseapp.com/chat)
 
 ## Getting Started
 
@@ -45,7 +45,7 @@ yarn dev
 
 ## Folder Structure
 
--  [bulletproof-react folder structure](https://github.com/alan2207/bulletproof-react/blob/master/docs/project-structure.md)
+- [bulletproof-react folder structure](https://github.com/alan2207/bulletproof-react/blob/master/docs/project-structure.md)
 
 ```bash
 src
@@ -75,7 +75,6 @@ src
 - Add a new chat
 - Switch between chats
 - Delete a chat
-
 
 ### Frontend Optimizations
 
