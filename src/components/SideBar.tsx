@@ -12,8 +12,8 @@ export const DRAWER_WIDTH = 280
 
 const SideBar = () => {
   const navigate = useNavigate()
-  const { addNewSession } = useChatActions()
   const { sessions, currentSessionId, deleteSession } = useChatStore()
+  const { addNewSession } = useChatActions(currentSessionId)
 
   const [mobileOpen, setMobileOpen] = useState(false)
   const [sessionToDelete, setSessionToDelete] = useState<string | null>(null)

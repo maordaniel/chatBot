@@ -1,9 +1,10 @@
 import { useCallback } from "react"
 import { v4 as uuidv4 } from "uuid"
-import { Role } from "@features/Chat/types"
+import { Message, Role } from "@features/Chat/types"
 import { useChatStore } from "@features/Chat/stores/chatStore"
+import { getLLMStreamResponse } from "@features/Chat/services/LLMService"
 
-export const useChatActions = () => {
+export const useChatActions = (sessionId: string) => {
   const {
     addSession,
     addMessage,
@@ -12,7 +13,7 @@ export const useChatActions = () => {
   } = useChatStore()
 
   const addNewMessage = useCallback(
-    ({ sessionId, content, role }: { sessionId: string; content: string; role: Role }): string => {
+    ({ content, role }: { content: string; role: Role }): string => {
       const messageId = uuidv4()
       addMessage(sessionId, {
         id: messageId,
@@ -25,7 +26,7 @@ export const useChatActions = () => {
 
       return messageId
     },
-    [addMessage, setLoadingMessage],
+    [addMessage, sessionId, setLoadingMessage],
   )
 
   const addNewSession = useCallback((): string => {
@@ -44,12 +45,10 @@ export const useChatActions = () => {
 
   const updateMessage = useCallback(
     ({
-      sessionId,
       messageId,
       content,
       finalUpdate = false,
     }: {
-      sessionId: string
       messageId: string
       content: string
       finalUpdate: boolean
@@ -57,8 +56,48 @@ export const useChatActions = () => {
       updateStoreMessage(sessionId, messageId, { content })
       if (finalUpdate) setLoadingMessage(sessionId, false)
     },
-    [updateStoreMessage, setLoadingMessage],
+    [updateStoreMessage, sessionId, setLoadingMessage],
   )
 
-  return { addNewSession, addNewMessage, updateMessage }
+  const handleSendMessage = useCallback(
+    async (prompt: string, messages: Message[]) => {
+      addNewMessage({ content: prompt, role: Role.USER })
+      const assistantMessageId = addNewMessage({ content: "", role: Role.MODEL })
+
+      const messageContext = messages.map((msg) => ({
+        parts: [{ text: msg.content }],
+        role: msg.role,
+      }))
+
+      let responseText = ""
+      try {
+        await getLLMStreamResponse(prompt, messageContext, (text) => {
+          responseText += text
+          updateMessage({
+            finalUpdate: false,
+            content: responseText,
+            messageId: assistantMessageId,
+          })
+        })
+
+        updateMessage({
+          finalUpdate: true,
+          content: responseText,
+          messageId: assistantMessageId,
+        })
+        return null
+      } catch (err) {
+        updateMessage({
+          finalUpdate: true,
+          content: "Not able to get response from LLM",
+          messageId: assistantMessageId,
+        })
+        console.error("LLM Response Error:", err)
+        return "Failed to get response. Please try again."
+      }
+    },
+    [addNewMessage, updateMessage],
+  )
+
+  return { addNewSession, addNewMessage, updateMessage, handleSendMessage }
 }

@@ -1,9 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import { Box, Paper } from "@mui/material"
-import { Message, Role } from "@features/Chat/types"
+import { Message } from "@features/Chat/types"
 import { useChatStore } from "@features/Chat/stores/chatStore"
 import { useChatActions } from "@features/Chat/hooks/useChatActions"
-import { getLLMStreamResponse } from "@features/Chat/services/LLMService"
 import ChatInput from "@features/Chat/components/ChatInput"
 import ChatMessage from "@features/Chat/components/ChatMessage"
 
@@ -14,7 +13,7 @@ interface ChatBoardProps {
 
 const ChatBoard = ({ messages, sessionId }: ChatBoardProps) => {
   const { loadingMessage } = useChatStore()
-  const { addNewMessage, updateMessage } = useChatActions()
+  const { handleSendMessage } = useChatActions(sessionId)
   const [error, setError] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
@@ -26,47 +25,13 @@ const ChatBoard = ({ messages, sessionId }: ChatBoardProps) => {
     scrollToBottom()
   }, [messages])
 
-  const handleSendMessage = useCallback(
+  const onSendMessage = useCallback(
     async (prompt: string) => {
       setError(null)
-      addNewMessage({ sessionId, content: prompt, role: Role.USER })
-
-      let responseText = ""
-      const assistantMessageId = addNewMessage({
-        sessionId,
-        content: responseText,
-        role: Role.ASSISTANT,
-      })
-
-      try {
-        await getLLMStreamResponse(prompt, (text) => {
-          responseText += text
-          updateMessage({
-            sessionId,
-            finalUpdate: false,
-            content: responseText,
-            messageId: assistantMessageId,
-          })
-        })
-
-        updateMessage({
-          sessionId,
-          finalUpdate: true,
-          content: responseText,
-          messageId: assistantMessageId,
-        })
-      } catch (err) {
-        updateMessage({
-          sessionId,
-          finalUpdate: true,
-          content: "Not able to get response from LLM",
-          messageId: assistantMessageId,
-        })
-        setError("Failed to get response. Please try again.")
-        console.error("LLM Response Error:", err)
-      }
+      const errorMessage = await handleSendMessage(prompt, messages)
+      if (errorMessage) setError(errorMessage)
     },
-    [addNewMessage, sessionId, updateMessage],
+    [handleSendMessage, messages],
   )
 
   return (
@@ -85,7 +50,7 @@ const ChatBoard = ({ messages, sessionId }: ChatBoardProps) => {
         {error && <Box sx={{ color: "error.main", mt: 1, textAlign: "center" }}>{error}</Box>}
         <Box ref={messagesEndRef} />
       </Box>
-      <ChatInput onSendMessage={handleSendMessage} disabled={isLlmResLoading} />
+      <ChatInput onSendMessage={onSendMessage} disabled={isLlmResLoading} />
     </Paper>
   )
 }

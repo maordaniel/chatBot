@@ -48,7 +48,7 @@ interface ChatMessageProps {
 }
 const ChatMessage = memo(
   ({ isLlmResLoading, message: { role, timestamp, content } }: ChatMessageProps) => {
-    const isAssistant = role === Role.ASSISTANT
+    const isAssistant = role === Role.MODEL
 
     return (
       <Box
